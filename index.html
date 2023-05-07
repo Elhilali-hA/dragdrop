@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'poppins';
+  font-size: 30px;
+}
+
+.kanban {
+  display: flex;
+  justify-content: center;
+  min-height: 400px;
+  gap: 10px;
+  padding: 10px;
+}
+
+.gammes{
+    display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: cadetblue;
+  min-width: 200px;
+  border-radius: 5px;
+}
+.gammeProduct {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  min-width: 200px;
+  border-radius: 5px;
+  min-height: 100px;
+}
+.productdiv{
+    background-color: cadetblue;
+}
+.gammeblue{
+    background-color: blue;
+    height: 30%;
+}
+.gammegreen{
+    background-color: green;
+    height: 30%;
+}
+.gammeyellow{
+    background-color: yellow;
+    height: 30%;
+}
+
+.item {
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+</style>
+
+<body>
+    <div class="kanban">
+        <div>
+            <div class="gammeProduct productdiv">
+              <div class="item"  draggable="true">
+                <p id="tt">
+                    Card 01
+                </p>
+            </div>
+            </div>
+            <div class="gammeProduct productdiv">
+                <div class="item" draggable="true">Card 02</div>
+              </div>
+        </div>
+
+        <div class="gammes">
+
+            <div class="gammeProduct gammeblue">
+
+            </div>
+            <div class="gammeProduct gammegreen">
+    
+            </div>
+            <div class="gammeProduct gammeyellow">
+    
+            </div>
+        </div>
+    </div>
+    <button onclick="setname()">ddd</button>
+    <script>
+        function setname (name) {
+           document.getElementById("tt").innerHTML = 'new id'
+            
+        }
+        const gammeProducts = document.querySelectorAll(".gammeProduct");
+    
+    document.addEventListener("dragstart", (e) => {
+      e.target.classList.add("dragging");
+    });
+    
+    document.addEventListener("dragend", (e) => {
+      e.target.classList.remove("dragging");
+    });
+    
+    gammeProducts.forEach((item) => {
+      item.addEventListener("dragover", (e) => {
+        const dragging = document.querySelector(".dragging");
+        const applyAfter = getNewPosition(item, e.clientY);
+    
+        if (applyAfter) {
+          applyAfter.insertAdjacentElement("afterend", dragging);
+        } else {
+          item.prepend(dragging);
+        }
+      });
+    });
+    
+    function getNewPosition(gammeProduct, posY) {
+      const cards = gammeProduct.querySelectorAll(".item:not(.dragging)");
+      let result;
+    
+      for (let refer_card of cards) {
+        const box = refer_card.getBoundingClientRect();
+        const boxCenterY = box.y + box.height / 2;
+    
+        if (posY >= boxCenterY) result = refer_card;
+      }
+    
+      return result;
+    }
+    </script>
+</body>
+</html>
